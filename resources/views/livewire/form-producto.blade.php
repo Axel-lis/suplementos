@@ -44,6 +44,30 @@
             class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
         @error('stock_minimo') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
     </div>
+    <!-- Campos de precio -->
+    <div>
+        <label for="precio_publico" class="block text-sm font-medium text-gray-700">Precio Público</label>
+        <input type="number" step="0.01" id="precio_publico" wire:model="precio_publico"
+            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+        @error('precio_publico') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
+    </div>
+
+    <div>
+        <label for="precio_costo" class="block text-sm font-medium text-gray-700">Precio Costo</label>
+        <input type="number" step="0.01" id="precio_costo" wire:model="precio_costo"
+            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+        @error('precio_costo') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
+    </div>
+
+    <div>
+        <label for="precio_preferencial" class="block text-sm font-medium text-gray-700">Precio Preferencial</label>
+        <input type="number" step="0.01" id="precio_preferencial" wire:model="precio_preferencial"
+            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+        @error('precio_preferencial') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
+    </div>
+
+
+
 
     <div class="flex justify-end space-x-2 pt-4">
         <!-- Botón de Cancelar (Cierra el modal y resetea el formulario) -->

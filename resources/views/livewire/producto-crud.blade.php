@@ -8,6 +8,18 @@
     <button wire:click="create" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded mb-4">
         Crear Producto
     </button>
+    <button wire:click="abrirModalCategoria" type="button"
+        class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded mb-4">
+        Agregar Categoría
+    </button>
+    <button wire:click="abrirModalMarca" type="button"
+        class="bg-red-500 hover:bg-red-700 text-white px-4 py-2 rounded mb-4">
+        Agregar Marca
+    </button>
+    <!-- ver luego -->
+    <button wire:click="#" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded mb-4">
+        Exportar a Excel
+    </button>
 
     <!-- Tabla de productos -->
     <div class="overflow-x-auto bg-white shadow rounded-lg">
@@ -19,6 +31,9 @@
                     <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Categoría</th>
                     <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Marca</th>
                     <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Stock Mínimo</th>
+                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Precio Público</th>
+                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Precio Costo</th>
+                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Precio Preferencial</th>
                     <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Acciones</th>
                 </tr>
             </thead>
@@ -30,6 +45,24 @@
                     <td class="px-4 py-2">{{ $producto->categoria->nombre }}</td>
                     <td class="px-4 py-2">{{ $producto->marca->nombre }}</td>
                     <td class="px-4 py-2">{{ $producto->stock_minimo }}</td>
+
+                    <!-- Mostrar precios de cada tipo -->
+                    <td class="px-4 py-2">
+                        @foreach($producto->precios->where('tipo', 'publico') as $precio)
+                        ${{ number_format($precio->valor, 2) }}
+                        @endforeach
+                    </td>
+                    <td class="px-4 py-2">
+                        @foreach($producto->precios->where('tipo', 'costo') as $precio)
+                        ${{ number_format($precio->valor, 2) }}
+                        @endforeach
+                    </td>
+                    <td class="px-4 py-2">
+                        @foreach($producto->precios->where('tipo', 'preferencial') as $precio)
+                        ${{ number_format($precio->valor, 2) }}
+                        @endforeach
+                    </td>
+
                     <td class="px-4 py-2 space-x-2">
                         <button wire:click="edit({{ $producto->id }})"
                             class="text-blue-600 hover:underline">Editar</button>
@@ -56,4 +89,48 @@
         </div>
     </div>
     @endif
-</div>
+    <!-- Modal de Categoría -->
+    @if ($isCategoriaModalOpen)
+    <div class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+        <div class="bg-white p-6 rounded shadow-md w-full max-w-md">
+            <h2 class="text-lg font-semibold mb-4">Nueva Categoría</h2>
+
+            <input type="text" wire:model="nueva_categoria_nombre" placeholder="Nombre de la categoría"
+                class="w-full border border-gray-300 rounded px-3 py-2 mb-2 focus:outline-none focus:ring focus:border-blue-300">
+            @error('nueva_categoria_nombre') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
+
+            <div class="flex justify-end space-x-2 mt-4">
+                <button wire:click="cerrarModalCategoria"
+                    class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">
+                    Cancelar
+                </button>
+                <button wire:click="guardarCategoria"
+                    class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                    Guardar
+                </button>
+            </div>
+        </div>
+    </div>
+    @endif
+    <!-- Modal de Marca -->
+    @if ($isMarcaModalOpen)
+    <div class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+        <div class="bg-white p-6 rounded shadow-md w-full max-w-md">
+            <h2 class="text-lg font-semibold mb-4">Nueva Marca</h2>
+
+            <input type="text" wire:model="nueva_marca_nombre" placeholder="Nombre de la marca"
+                class="w-full border border-gray-300 rounded px-3 py-2 mb-2 focus:outline-none focus:ring focus:border-blue-300">
+            @error('nueva_marca_nombre') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
+
+            <div class="flex justify-end space-x-2 mt-4">
+                <button wire:click="cerrarModalMarca"
+                    class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">
+                    Cancelar
+                </button>
+                <button wire:click="guardarMarca" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                    Guardar
+                </button>
+            </div>
+        </div>
+    </div>
+    @endif
