@@ -34,7 +34,7 @@ class ProductoCrud extends Component
 
     // Buscar precios por tipo
     $this->precio_publico = optional($producto->precios->firstWhere('tipo', 'publico'))->valor;
-    $this->precio_costo = optional($producto->precios->firstWhere('tipo', 'privado'))->valor;
+    $this->precio_costo = optional($producto->precios->firstWhere('tipo', 'costo'))->valor;
     $this->precio_preferencial = optional($producto->precios->firstWhere('tipo', 'preferencial'))->valor;
 
     $this->isOpen = 1;
