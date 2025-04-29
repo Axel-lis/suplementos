@@ -14,7 +14,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    if (auth()->check()) {
+        return redirect()->route('dashboard'); // Redirige al dashboard si está autenticado
+    }
+    return redirect()->route('login'); // Redirige al login si no está autenticado
 });
 
 Route::middleware([
@@ -26,7 +29,5 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 
-
-Route::get('/productos', ProductoCrud::class)->name('productos');
-
+    Route::get('/productos', ProductoCrud::class)->name('productos');
 });
