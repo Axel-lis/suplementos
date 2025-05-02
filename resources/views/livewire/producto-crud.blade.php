@@ -16,8 +16,7 @@
         class="bg-red-500 hover:bg-red-700 text-white px-4 py-2 rounded mb-4">
         Agregar Marca
     </button>
-    <!-- ver luego -->
-    <button wire:click="#" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded mb-4">
+    <button wire:click="abrirModalExportar" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded mb-4">
         Exportar a Excel
     </button>
 
@@ -73,6 +72,10 @@
                 @endforeach
             </tbody>
         </table>
+        <div class="mt-4">
+            {{ $productos->links('pagination::tailwind') }}
+        </div>
+
     </div>
 
     <!-- Modal -->
@@ -130,6 +133,35 @@
                 <button wire:click="guardarMarca" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
                     Guardar
                 </button>
+            </div>
+        </div>
+    </div>
+    @endif
+    <!-- Modal de Excel -->
+
+    <!-- Modal de exportación -->
+    @if ($isExportModalOpen)
+    <div class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+        <div class="bg-white p-6 rounded shadow-md w-full max-w-md">
+            <h2 class="text-lg font-semibold mb-4">Seleccionar columnas para exportar</h2>
+
+            <div class="space-y-2">
+                @foreach($columnasDisponibles as $columna => $label)
+                <div>
+                    <label class="inline-flex items-center">
+                        <input type="checkbox" wire:model="columnasSeleccionadas" value="{{ $columna }}"
+                            class="form-checkbox">
+                        <span class="ml-2">{{ $label }}</span>
+                    </label>
+                </div>
+                @endforeach
+            </div>
+
+            <div class="flex justify-end space-x-2 mt-4">
+                <button wire:click="cerrarModalExportar"
+                    class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">Cancelar</button>
+                <button wire:click="exportarExcel"
+                    class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">Exportar</button>
             </div>
         </div>
     </div>
