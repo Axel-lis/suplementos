@@ -15,14 +15,55 @@ class ProductoCrud extends Component
     public $lista_productos, $nombre, $descripcion, $categoria_id, $marca_id, $stock_minimo, $producto_id, $precio_publico, $precio_costo, $precio_preferencial;
     public $isOpen = 0; // Para controlar si estamos creando/ editando
 
-    public function render()
+    public $filtroCategoria = '';
+    public $filtroMarca = '';
+// Método para aplicar filtros manualmente
+public function aplicarFiltros()
 {
-    $productos = Producto::with('categoria', 'marca', 'precios')->paginate(10);
+    $this->resetPage(); // Reiniciar paginación
+}
+
+// Método para resetear filtros
+public function resetearFiltros()
+{
+    $this->filtroCategoria = '';
+    $this->filtroMarca = '';
+    $this->resetPage();
+}    
+public function updatedFiltroCategoria()
+{
+    $this->resetPage();
+}
+
+public function updatedFiltroMarca()
+{
+    $this->resetPage();
+}
+public function render()
+{
+    $query = Producto::query()
+        ->with('categoria', 'marca', 'precios');
+
+    // Aplicar filtros
+    if ($this->filtroCategoria) {
+        $query->whereHas('categoria', function ($q) {
+            $q->where('id', $this->filtroCategoria);
+        });
+    }
+
+    if ($this->filtroMarca) {
+        $query->whereHas('marca', function ($q) {
+            $q->where('id', $this->filtroMarca);
+        });
+    }
+
+    $productos = $query->paginate(10);
     $categorias = Categoria::all();
     $marcas = Marca::all();
 
     return view('livewire.producto-crud', compact('productos', 'categorias', 'marcas'));
 }
+
 
 
     // Editar Producto
@@ -209,7 +250,7 @@ class ProductoCrud extends Component
         'descripcion' => 'Descripción',
         'categoria' => 'Categoría',
         'marca' => 'Marca',
-        'stock_minmo' => 'Stock Mínimo',
+        'stock_minimo' => 'Stock Mínimo',
         'precio_publico' => 'Precio Público',
         'precio_costo' => 'Precio Costo',
         'precio_preferencial' => 'Precio Preferencial',
@@ -225,13 +266,28 @@ class ProductoCrud extends Component
         $this->isExportModalOpen  = false;
         $this->columnasSeleccionadas = []; // Reinicia las columnas seleccionadas
     }
-    public function exportarExcel ()
+   //* Exportar productos a Excel *//
+    public function exportarExcel()
     {
         if(empty($this->columnasSeleccionadas)){
             session()->flash('message', 'Por favor selecciona al menos una columna para exportar.');
             return;
         }
-        return Excel::download(new ProductosExport($this->columnasSeleccionadas), 'productos.xlsx');
+        
+    // En el método exportarExcel() del componente:
+    $nombreArchivo = 'productos';
+    if ($this->filtroCategoria) {
+        $nombreArchivo .= '-categoria-' . Categoria::find($this->filtroCategoria)->nombre;
+    }
+    if ($this->filtroMarca) {
+        $nombreArchivo .= '-marca-' . Marca::find($this->filtroMarca)->nombre;
+    }
+    $nombreArchivo .= '.xlsx';
+
+    return Excel::download(
+        new ProductosExport($this->columnasSeleccionadas, $this->filtroCategoria, $this->filtroMarca), 
+        $nombreArchivo
+    );
     }
 
 }

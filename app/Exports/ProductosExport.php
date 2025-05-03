@@ -18,16 +18,33 @@ use PhpOffice\PhpSpreadsheet\Style\Fill;
 class ProductosExport implements FromCollection, WithHeadings, WithStyles, WithColumnFormatting, WithEvents
 {
     protected $columnas;
+    protected $filtroCategoria;
+    protected $filtroMarca;
 
-    public function __construct(array $columnas)
+    public function __construct(array $columnas, $filtroCategoria = null, $filtroMarca =null)
     {
-        $this->columnas = $columnas;
+       $this->filtroCategoria = $filtroCategoria;
+       $this->filtroMarca = $filtroMarca;
+       $this->columnas = $columnas;
     }
 
     public function collection()
     {
-        $productos = Producto::with('categoria', 'marca', 'precios')->get();
+        $productos = Producto::with('categoria', 'marca', 'precios');
 
+        // Aplicar filtros
+        if ($this->filtroCategoria) {
+            $productos->whereHas('categoria', function ($q) {
+                $q->where('id', $this->filtroCategoria);
+            });
+        }
+        if ($this->filtroMarca) {
+            $productos->whereHas('marca', function($q) {
+                $q->where('id', $this->filtroMarca);
+            });
+        }
+        $productos = $productos->get();
+        
         return $productos->map(function ($producto) {
             $row = [];
             foreach ($this->columnas as $col) {

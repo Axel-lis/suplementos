@@ -22,6 +22,40 @@
 
     <!-- Tabla de productos -->
     <div class="overflow-x-auto bg-white shadow rounded-lg">
+        <div class="flex space-x-4 mb-4 items-center">
+            <!-- Filtro Categoría -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Filtrar por Categoría</label>
+                <select wire:model="filtroCategoria" class="mt-1 block w-full border-gray-300 rounded shadow-sm">
+                    <option value="">Todas</option>
+                    @foreach($categorias as $cat)
+                    <option value="{{ $cat->id }}">{{ $cat->nombre }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <!-- Filtro Marca -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Filtrar por Marca</label>
+                <select wire:model="filtroMarca" class="mt-1 block w-full border-gray-300 rounded shadow-sm">
+                    <option value="">Todas</option>
+                    @foreach($marcas as $marca)
+                    <option value="{{ $marca->id }}">{{ $marca->nombre }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <!-- Botones de Acción -->
+            <div class="flex-1 flex justify-end space-x-2">
+                <button wire:click="aplicarFiltros" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded">
+                    Buscar
+                    <!-- Nuevo botón -->
+                </button>
+                <button wire:click="resetearFiltros" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded">
+                    Limpiar
+                </button>
+            </div>
+        </div>
         <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
                 <tr>
