@@ -122,15 +122,15 @@
     <!-- Modal -->
     @if($isOpen)
     <div class="fixed inset-0 z-10 bg-gray-800 bg-opacity-50 flex items-center justify-center">
-        <div class="bg-white rounded-lg shadow-lg w-full max-w-lg">
+        <div class="bg-white rounded-lg shadow-lg w-full max-w-lg max-h-screen overflow-y-auto">
             <div class="px-6 py-4 border-b">
                 <h2 class="text-lg font-semibold">{{ $producto_id ? 'Editar Producto' : 'Crear Producto' }}</h2>
             </div>
             <div class="p-6">
                 @include('livewire.form-producto')
-
             </div>
         </div>
+
     </div>
     @endif
     <!-- Modal de Categoría -->
