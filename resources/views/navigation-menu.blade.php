@@ -16,6 +16,10 @@
                         class="text-white">
                         {{ __('Ir al Inicio') }}
                     </x-nav-link>
+                    <x-nav-link href="{{ route('carrito') }}" :active="request()->routeIs('carrito')"
+                        class="text-white text-hover:text-green-300">
+                        {{ __('Carrito') }}
+                    </x-nav-link>
                 </div>
             </div>
 

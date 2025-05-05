@@ -1,7 +1,7 @@
 <?php
-    use App\Livewire\ProductoCrud;
+use App\Livewire\ProductoCrud;
 use Illuminate\Support\Facades\Route;
-
+use App\Livewire\CarritoProducto;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -28,6 +28,6 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
-
     Route::get('/productos', ProductoCrud::class)->name('productos');
+    Route::get('/carrito', CarritoProducto::class)->name('carrito');
 });

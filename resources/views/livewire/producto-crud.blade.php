@@ -99,9 +99,16 @@
                     <td class="px-4 py-2 space-x-2">
                         <button wire:click="edit({{ $producto->id }})"
                             class="text-blue-600 hover:underline">Editar</button>
+
                         <button wire:click="delete({{ $producto->id }})"
                             class="text-red-600 hover:underline">Eliminar</button>
+
+                        <!-- NUEVO: botón Cargar al carrito -->
+                        <button wire:click="addToCart({{ $producto->id }})" class="text-green-600 hover:underline">
+                            Cargar al carrito
+                        </button>
                     </td>
+
                 </tr>
                 @endforeach
             </tbody>

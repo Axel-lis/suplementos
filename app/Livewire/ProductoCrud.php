@@ -289,5 +289,41 @@ public function render()
         $nombreArchivo
     );
     }
+/**
+ * Agrega un producto al carrito de compras (usando sesión).
+ *
+ * @param  int  $id
+ * @return void
+ */
+public function addToCart($id)
+{
+    $producto = Producto::with('categoria', 'marca', 'precios')->find($id);
+    if (! $producto) {
+        session()->flash('message', 'Producto no encontrado.');
+        return;
+    }
+
+    $precioPublico = optional($producto->precios->firstWhere('tipo','publico'))->valor ?? 0;
+
+    $cart = session()->get('cart', []);
+
+    if (isset($cart[$id])) {
+        $cart[$id]['cantidad']++;
+    } else {
+        $cart[$id] = [
+            'nombre'        => $producto->nombre,
+            'descripcion'   => $producto->descripcion,
+            'categoria'     => $producto->categoria->nombre,
+            'marca'         => $producto->marca->nombre,
+            'precio_publico'=> $precioPublico,
+            'cantidad'      => 1,
+        ];
+    }
+
+    session()->put('cart', $cart);
+
+    session()->flash('message', 'Producto agregado al carrito correctamente.');
+}
+
 
 }

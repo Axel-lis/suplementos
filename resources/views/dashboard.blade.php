@@ -10,6 +10,11 @@
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                 <livewire:producto-crud />
             </div>
+            <div class="mt-4">
+                <a href=" {{ route('carrito') }}" class="text-lg text-bold text-blue-500 hover:underline">
+                    {{ __('Ir al carrito') }}
+                </a>
+            </div>
         </div>
     </div>
 </x-app-layout>
